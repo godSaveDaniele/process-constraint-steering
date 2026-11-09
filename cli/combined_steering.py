@@ -14,11 +14,11 @@ from jellyfish import damerau_levenshtein_distance
 from tqdm.auto import tqdm
 
 from constraints.extraction import EVALUATORS
-from eval_model import BASE_MODEL, read_pickle, trim_suffix, normalize
+from cli.eval_model import BASE_MODEL, read_pickle, trim_suffix, normalize, constraint_metrics
 from neural_network.HistoryDataset import CustomDataset
 from neural_network.llamp_multiout import BertMultiOutputClassificationHeads
 from utility import reproducibility
-from weight_steering import check_weights, print_nonzero_directions
+from cli.weight_steering import check_weights, print_nonzero_directions
 
 
 def combine_weights(base, checkpoint_1, checkpoint_2, alpha, beta):
@@ -46,17 +46,6 @@ def combine_weights(base, checkpoint_1, checkpoint_2, alpha, beta):
     return weights
 
 
-def metrics(counts):
-    total = sum(counts.values())
-    activated = counts['fulfilled'] + counts['violated']
-    return dict(
-        fulfilled=counts['fulfilled'], violated=counts['violated'], vacuous=counts['vacuous'],
-        compliance=(counts['fulfilled'] + counts['vacuous']) / total,
-        non_vacuous_compliance=counts['fulfilled'] / activated if activated else None,
-        activation_rate=activated / total,
-    )
-
-
 def update_counts(trace, constraints, counts, joint):
     states = [EVALUATORS[c['template']](trace, c['activation'], c['target']) for c in constraints]
     for counter, state in zip(counts, states):
@@ -69,8 +58,8 @@ def update_counts(trace, constraints, counts, joint):
 
 def summarize(counts, joint):
     return {
-        'constraint_1': metrics(counts[0]),
-        'constraint_2': metrics(counts[1]),
+        'constraint_1': constraint_metrics(counts[0]),
+        'constraint_2': constraint_metrics(counts[1]),
         'joint_compliance': joint['both'] / sum(joint.values()),
         'contingency': {key: joint[key] for key in ('both', 'only_1', 'only_2', 'neither')},
     }

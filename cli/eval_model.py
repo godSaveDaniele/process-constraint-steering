@@ -2,10 +2,10 @@ import argparse
 from collections import Counter
 from datetime import datetime
 import json
+import math
 from pathlib import Path
 import pickle
 
-import numpy as np
 import torch
 from torch.utils.data import DataLoader
 from transformers import AutoModel, AutoTokenizer
@@ -47,19 +47,25 @@ def normalize(activity):
 
 
 def constraint_metrics(counts):
+    """Supporto F/N e confidence F/(F+V), distinti dalla compliance."""
     total = sum(counts.values())
+    if not total:
+        raise ValueError('Nessun esempio da valutare.')
     activated = counts['fulfilled'] + counts['violated']
     return {
         'fulfilled': counts['fulfilled'],
         'violated': counts['violated'],
         'vacuous': counts['vacuous'],
         'compliance': (counts['fulfilled'] + counts['vacuous']) / total,
-        'non_vacuous_compliance': counts['fulfilled'] / activated,
+        'non_vacuous_compliance': counts['fulfilled'] / total,
+        'confidence': counts['fulfilled'] / activated if activated else None,
         'activation_rate': activated / total,
     }
 
 
 def evaluate(args):
+    if args.limit is not None and args.limit < 1:
+        raise ValueError('Il limite deve essere positivo.')
     reproducibility.set_seed()
     checkpoint = Path(args.checkpoint or f'models/{args.dataset}_all.pth')
     if not checkpoint.is_file():
@@ -71,6 +77,8 @@ def evaluate(args):
         return read_pickle(folder / f'{args.dataset}_{kind}_all.pkl')
 
     texts = load('test')
+    if not texts:
+        raise ValueError('Il test set è vuoto.')
     labels = load('suffix_test')
     prefixes = load('prefix_activities_test')
     #per valutare la compliance è necessario saperen la lista di attività del prefisso e non solo il contenuto testuale
@@ -111,7 +119,10 @@ def evaluate(args):
     output_dir = Path('outputs') / f'eval_{args.dataset}_{run}'
     output_dir.mkdir(parents=True, exist_ok=False)
     predicted_counts, actual_counts = Counter(), Counter()
-    dl_scores = []
+    dl_scores, compliant_scores = [], []
+    # In Precedence[A, B] l'obbligo è attivato da B.
+    trigger = target if args.template == 'Precedence' else activation
+    predicted_activations = actual_activations = 0
     with (output_dir / 'examples.jsonl').open('w', encoding='utf-8') as file, torch.no_grad():
         for index, batch in enumerate(tqdm(loader, desc='Evaluation')):
             outputs = model(batch['input_ids'].to(device), batch['attention_mask'].to(device))
@@ -136,6 +147,12 @@ def evaluate(args):
             denominator = max(len(pred_string), len(true_string))
             score = 1 - damerau_levenshtein_distance(pred_string, true_string) / denominator if denominator else 1.0
             dl_scores.append(score)
+            # Il sottoinsieme dipende dalla traccia reale, non dalla predizione.
+            if actual_state in {'fulfilled', 'vacuous'}:
+                compliant_scores.append(score)
+            if args.dataset == 'logistics':
+                predicted_activations += (prefix + predicted_suffix).count(trigger)
+                actual_activations += (prefix + true_suffix).count(trigger)
             record = {
                 'test_index': index,
                 'prefix_text': texts[index], 
@@ -155,12 +172,19 @@ def evaluate(args):
     summary = {
         'dataset': args.dataset, 
         'checkpoint': str(checkpoint), 
-        'examples': limit,
+        'examples': len(dl_scores),
         'constraint': {'template': args.template, 'activation': activation, 'target': target},
-        'dl_score_original': float(np.mean(dl_scores)),
+        'dl_score_original': math.fsum(dl_scores) / len(dl_scores),
+        'dl_score_compliant_subset': (
+            math.fsum(compliant_scores) / len(compliant_scores) if compliant_scores else None
+        ),
+        'compliant_examples': len(compliant_scores),
         'predicted': constraint_metrics(predicted_counts),
         'real': constraint_metrics(actual_counts),
     }
+    if args.dataset == 'logistics':
+        summary['predicted']['mean_activations_per_trace'] = predicted_activations / len(dl_scores)
+        summary['real']['mean_activations_per_trace'] = actual_activations / len(dl_scores)
     (output_dir / 'metrics.json').write_text(json.dumps(summary, indent=2))
     print(json.dumps(summary, indent=2))
     print('Risultati:', output_dir)

@@ -11,7 +11,7 @@ from torch.utils.data import DataLoader
 from transformers import AutoModel, AutoTokenizer
 from tqdm.auto import tqdm
 
-from constrained_fine_tuning import freeze_model
+from cli.constrained_fine_tuning import freeze_model
 from semantic_loss.chain_response_loss import ChainResponseSoftLoss
 from semantic_loss.response_loss import ResponseSoftLoss
 from neural_network.HistoryDataset import CustomDataset

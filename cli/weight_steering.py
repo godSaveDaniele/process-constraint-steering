@@ -8,7 +8,7 @@ import tempfile
 
 import torch
 from constraints.extraction import EVALUATORS
-from eval_model import evaluate
+from cli.eval_model import evaluate
 
 
 def check_weights(base, constrained):
@@ -72,7 +72,7 @@ def add_steering_vector(base, constrained, alpha):
 
 
 def evaluate_alphas(args):
-    if not all(math.isfinite(alpha) for alpha in args.alphas):
+    if not args.alphas or not all(math.isfinite(alpha) for alpha in args.alphas):
         raise ValueError('Alpha values must be finite.')
     
     base = torch.load(args.base_checkpoint, map_location='cpu', weights_only=True)
@@ -124,13 +124,17 @@ def evaluate_alphas(args):
                 'alpha': alpha,
                 'examples': summary['examples'],
                 'dl_score_original': summary['dl_score_original'],
+                'dl_score_compliant_subset': summary['dl_score_compliant_subset'],
                 'compliance': metrics['compliance'],
-                'non_vacuous_compliance': metrics['non_vacuous_compliance'],
+                'non_vacuous_compliance (support)': metrics['non_vacuous_compliance'],
+                'confidence': metrics['confidence'],
                 'activation_rate': metrics['activation_rate'],
                 'fulfilled': metrics['fulfilled'],
                 'violated': metrics['violated'],
                 'vacuous': metrics['vacuous'],
             }
+            if 'mean_activations_per_trace' in metrics:
+                row['mean_activations_per_trace'] = metrics['mean_activations_per_trace']
             results.append(row)
             with (output_dir / 'results.csv').open('w', newline='') as file:
                 writer = csv.DictWriter(file, fieldnames=list(row))

@@ -11,12 +11,12 @@ from torch.utils.data import DataLoader
 from transformers import AutoModel, AutoTokenizer
 from tqdm.auto import tqdm
 
-from eval_model import BASE_MODEL, normalize, read_pickle
+from cli.eval_model import BASE_MODEL, normalize, read_pickle
 from neural_network.HistoryDataset import CustomDataset
 from neural_network.llamp_multiout import BertMultiOutputClassificationHeads
 from preprocessing.log_to_history import Log
 from utility import reproducibility
-from weight_steering import check_weights
+from cli.weight_steering import check_weights
 
 GROUPS = {
     'satisfied': 'A presente: obblighi già soddisfatti',
