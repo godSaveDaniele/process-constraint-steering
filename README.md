@@ -21,7 +21,7 @@ Dato un checkpoint base `θ₀` e un checkpoint adattato `θ₁`, il task vector
 - [7. Interpretazione delle direzioni](#7-interpretazione-delle-direzioni)
 - [Metriche](#metriche)
 - [Estrazione dei vincoli](#estrazione-dei-vincoli)
-- [Riferimenti e licenza](#riferimenti-e-licenza)
+- [Riferimenti](#riferimenti)
 
 ## Preparazione dell'ambiente
 
@@ -402,10 +402,9 @@ Questo script non espone opzioni CLI: dataset, template e soglie sono configurat
 
 Produce `constraints/outputs/<dataset>_all.csv` e `<dataset>_selected.csv`. Diversamente dalla valutazione dei suffissi, qui le metriche sono calcolate sulle tracce complete raggruppate per `case` nel CSV originale.
 
-## Riferimenti e licenza
+## Riferimenti
 
 V. Pasquadibisceglie, A. Appice e D. Malerba, *LUPIN: A LLM Approach for Activity Suffix Prediction in Business Process Event Logs*, ICPM 2024.
 
 - [Paper LUPIN](https://doi.org/10.1109/ICPM63005.2024.10680620)
 - [Implementazione originale LUPIN](https://github.com/vinspdb/LUPIN)
-- [Licenza presente nel repository](LICENSE.md)
