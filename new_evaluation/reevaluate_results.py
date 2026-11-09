@@ -5,7 +5,7 @@ from collections import Counter
 from pathlib import Path
 from jellyfish import damerau_levenshtein_distance
 
-INPUT_DIR = Path('/Users/daniele/Desktop/esperimenti/9_steering_logistics_compliant_subset_seed_42/risultati_parziali/')
+INPUT_DIR = Path('/Users/daniele/Desktop/esperimenti/10_steering_logistics_loss_classica_loss_semantica_seed_42/risultati parziali')
 
 ALPHAS = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.5]
 OUTPUT_FILE = INPUT_DIR.parent / 'risultati importanti/new_results.csv'

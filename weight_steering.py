@@ -91,7 +91,7 @@ def evaluate_alphas(args):
     summaries = []
     # Un solo checkpoint temporaneo, riscritto per ciascun alpha.
     # I due checkpoint di partenza non vengono mai modificati.
-    with tempfile.TemporaryDirectory(prefix='lupin-steering-') as directory:
+    with tempfile.TemporaryDirectory(prefix='process-constraint-steering-') as directory:
         temporary_checkpoint = Path(directory) / 'interpolated.pth'
         for alpha in args.alphas:
             print(f'\n===== ALPHA = {alpha} =====', flush=True)
