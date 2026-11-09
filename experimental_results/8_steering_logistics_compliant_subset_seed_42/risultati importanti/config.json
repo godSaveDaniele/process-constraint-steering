@@ -1,0 +1,25 @@
+{
+  "dataset": "logistics",
+  "base_checkpoint": "/kaggle/input/datasets/danieleolivet/lupin-logistics-model/best.pth",
+  "constrained_checkpoint": "/kaggle/working/LUPIN/models/logistics/constrained/heads_only_seed42/best.pth",
+  "template": "Chain Response",
+  "activation": "Weigh",
+  "target": "Place in Stock",
+  "alphas": [
+    0.0,
+    0.1,
+    0.2,
+    0.3,
+    0.4,
+    0.5,
+    0.6,
+    0.7,
+    0.8,
+    0.9,
+    1.0,
+    1.1,
+    1.2,
+    1.5
+  ],
+  "limit": null
+}

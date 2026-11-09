@@ -1,0 +1,27 @@
+{
+  "dataset": "bpic2017_o",
+  "checkpoint": "/tmp/lupin-steering-j43l3tev/interpolated.pth",
+  "examples": 65916,
+  "constraint": {
+    "template": "Response",
+    "activation": "OReturned",
+    "target": "OAccepted"
+  },
+  "dl_score_original": 0.8592122297064951,
+  "predicted": {
+    "fulfilled": 29633,
+    "violated": 8218,
+    "vacuous": 28065,
+    "compliance": 0.8753261727046544,
+    "non_vacuous_compliance": 0.7828855248210087,
+    "activation_rate": 0.5742308392499544
+  },
+  "real": {
+    "fulfilled": 29630,
+    "violated": 10571,
+    "vacuous": 25715,
+    "compliance": 0.839629225074337,
+    "non_vacuous_compliance": 0.7370463421307928,
+    "activation_rate": 0.609882274409855
+  }
+}

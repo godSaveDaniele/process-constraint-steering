@@ -1,0 +1,27 @@
+{
+  "dataset": "bpic2017_o",
+  "checkpoint": "/tmp/lupin-steering-5y6tdnn1/interpolated.pth",
+  "examples": 65916,
+  "constraint": {
+    "template": "Response",
+    "activation": "OReturned",
+    "target": "OAccepted"
+  },
+  "dl_score_original": 0.8538897991382972,
+  "predicted": {
+    "fulfilled": 29460,
+    "violated": 9483,
+    "vacuous": 26973,
+    "compliance": 0.8561350810121974,
+    "non_vacuous_compliance": 0.7564902549880594,
+    "activation_rate": 0.590797378481704
+  },
+  "real": {
+    "fulfilled": 29630,
+    "violated": 10571,
+    "vacuous": 25715,
+    "compliance": 0.839629225074337,
+    "non_vacuous_compliance": 0.7370463421307928,
+    "activation_rate": 0.609882274409855
+  }
+}

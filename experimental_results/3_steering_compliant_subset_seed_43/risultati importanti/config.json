@@ -1,0 +1,22 @@
+{
+  "dataset": "bpic2017_o",
+  "base_checkpoint": "/kaggle/input/datasets/danieleoliveti19/lupin-bpic-2017-o/bpic2017_o_all.pth",
+  "constrained_checkpoint": "/kaggle/working/LUPIN/models/bpic2017_o/constrained/heads_only_seed43/best.pth",
+  "template": "Response",
+  "activation": "O_Returned",
+  "target": "O_Accepted",
+  "alphas": [
+    0.0,
+    0.1,
+    0.2,
+    0.3,
+    0.4,
+    0.5,
+    0.6,
+    0.7,
+    0.8,
+    0.9,
+    1.0
+  ],
+  "limit": null
+}

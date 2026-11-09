@@ -1,0 +1,27 @@
+{
+  "dataset": "logistics",
+  "checkpoint": "/tmp/lupin-steering-nzha6f85/interpolated.pth",
+  "examples": 11206,
+  "constraint": {
+    "template": "Chain Response",
+    "activation": "Weigh",
+    "target": "PlaceinStock"
+  },
+  "dl_score_original": 0.6304592243387644,
+  "predicted": {
+    "fulfilled": 6080,
+    "violated": 4887,
+    "vacuous": 239,
+    "compliance": 0.5638943423166161,
+    "non_vacuous_compliance": 0.554390444059451,
+    "activation_rate": 0.9786721399250402
+  },
+  "real": {
+    "fulfilled": 6943,
+    "violated": 4226,
+    "vacuous": 37,
+    "compliance": 0.6228805996787435,
+    "non_vacuous_compliance": 0.6216313009221953,
+    "activation_rate": 0.996698197394253
+  }
+}

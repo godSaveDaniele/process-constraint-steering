@@ -1,0 +1,27 @@
+{
+  "dataset": "bpic2017_o",
+  "checkpoint": "/tmp/lupin-steering-nlkt1kat/interpolated.pth",
+  "examples": 65916,
+  "constraint": {
+    "template": "Response",
+    "activation": "OReturned",
+    "target": "OAccepted"
+  },
+  "dl_score_original": 0.8557798308958876,
+  "predicted": {
+    "fulfilled": 29525,
+    "violated": 9017,
+    "vacuous": 27374,
+    "compliance": 0.8632046847502882,
+    "non_vacuous_compliance": 0.7660474287789943,
+    "activation_rate": 0.5847138782693124
+  },
+  "real": {
+    "fulfilled": 29630,
+    "violated": 10571,
+    "vacuous": 25715,
+    "compliance": 0.839629225074337,
+    "non_vacuous_compliance": 0.7370463421307928,
+    "activation_rate": 0.609882274409855
+  }
+}

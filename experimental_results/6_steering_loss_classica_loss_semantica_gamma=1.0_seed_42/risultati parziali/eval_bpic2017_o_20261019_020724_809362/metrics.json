@@ -1,0 +1,27 @@
+{
+  "dataset": "bpic2017_o",
+  "checkpoint": "/tmp/lupin-steering-e8__aeh6/interpolated.pth",
+  "examples": 65916,
+  "constraint": {
+    "template": "Response",
+    "activation": "OReturned",
+    "target": "OAccepted"
+  },
+  "dl_score_original": 0.8554182596031312,
+  "predicted": {
+    "fulfilled": 29576,
+    "violated": 8977,
+    "vacuous": 27363,
+    "compliance": 0.8638115176891802,
+    "non_vacuous_compliance": 0.7671517132259487,
+    "activation_rate": 0.5848807573275078
+  },
+  "real": {
+    "fulfilled": 29630,
+    "violated": 10571,
+    "vacuous": 25715,
+    "compliance": 0.839629225074337,
+    "non_vacuous_compliance": 0.7370463421307928,
+    "activation_rate": 0.609882274409855
+  }
+}

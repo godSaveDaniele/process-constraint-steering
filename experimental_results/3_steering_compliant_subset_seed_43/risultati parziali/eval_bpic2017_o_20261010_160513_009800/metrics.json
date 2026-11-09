@@ -1,0 +1,27 @@
+{
+  "dataset": "bpic2017_o",
+  "checkpoint": "/tmp/lupin-steering-gh0ns9wm/interpolated.pth",
+  "examples": 65916,
+  "constraint": {
+    "template": "Response",
+    "activation": "OReturned",
+    "target": "OAccepted"
+  },
+  "dl_score_original": 0.8644701842749357,
+  "predicted": {
+    "fulfilled": 29973,
+    "violated": 6193,
+    "vacuous": 29750,
+    "compliance": 0.906047090236058,
+    "non_vacuous_compliance": 0.828761820494387,
+    "activation_rate": 0.5486680016991322
+  },
+  "real": {
+    "fulfilled": 29630,
+    "violated": 10571,
+    "vacuous": 25715,
+    "compliance": 0.839629225074337,
+    "non_vacuous_compliance": 0.7370463421307928,
+    "activation_rate": 0.609882274409855
+  }
+}
