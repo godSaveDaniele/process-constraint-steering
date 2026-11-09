@@ -34,24 +34,7 @@ python3.10 -m venv .venv
 source .venv/bin/activate
 ```
 
-Se l'ambiente `.venv` esiste già, basta attivarlo. Il codice usa CUDA quando disponibile e CPU altrimenti; non seleziona automaticamente MPS su macOS. Modello e tokenizer `prajjwal1/bert-medium` vengono caricati tramite Hugging Face: al primo utilizzo occorre scaricarli, oppure averli già nella cache.
-
-Nella versione corrente non è presente un file `requirements.txt`. Le dipendenze dirette e le versioni rilevate nell'ambiente locale Python 3.10 sono:
-
-```bash
-python -m pip install \
-  torch==2.2.2 transformers==4.38.2 numpy==1.26.4 pandas==2.0.3 \
-  scikit-learn==1.7.2 jinja2==3.1.3 jellyfish==1.0.3 \
-  tqdm==4.66.2 matplotlib==3.10.9
-```
-
-Queste versioni descrivono l'ambiente locale, non un lock file completo. La distribuzione di PyTorch deve essere compatibile con il sistema e l'eventuale runtime CUDA.
-
-Per verificare gli import e consultare le opzioni senza avviare un esperimento:
-
-```bash
-python -m cli.weight_steering --help
-```
+Se l'ambiente `.venv` esiste già, basta attivarlo. Il codice usa CUDA quando disponibile e CPU altrimenti. Modello e tokenizer `prajjwal1/bert-medium` vengono caricati tramite Hugging Face: al primo utilizzo occorre scaricarli, oppure averli già nella cache.
 
 ## Dati e struttura del progetto
 
@@ -68,7 +51,7 @@ models/                 Checkpoint locali
 outputs/                Risultati di valutazione e analisi
 ```
 
-I CSV disponibili nella copia corrente sono `event_log/bpic2017_o.csv` e `event_log/logistics.csv`. Ulteriori configurazioni sono definite in `utility/log_config.py`, ma richiedono i rispettivi CSV. Il nome passato come dataset coincide con quello del CSV senza estensione e con la chiave della configurazione.
+I CSV disponibili nella copia corrente sono `event_log/bpic2017_o.csv` e `event_log/logistics.csv`.  
 
 Il preprocessing richiede colonne come `case`, `activity`, `timestamp` e gli attributi previsti dalla configurazione del dataset. Un nuovo CSV non è automaticamente compatibile: occorre definirne attributi e template narrativi in `utility/log_config.py`. Il preprocessing narrativo legge Logistics come CSV di tracce lineari. Il comando `cli.extract_process_execution_OCEL` genera questo CSV a partire dall’OCEL 2.0 originale.
 
@@ -85,7 +68,7 @@ I comandi di training eseguono il preprocessing. La valutazione e lo steering ri
 python -c 'from preprocessing.log_to_history import Log; Log("bpic2017_o", "all")'
 ```
 
-La validazione del training usa il 20% delle coppie disponibili nella partizione di training, con split casuale controllato dal seed. Il test rimane quello originale, anche dopo il fine-tuning su tracce selezionate.
+
 
 I checkpoint devono avere architettura, mapping delle attività e numero di teste compatibili con i dati preprocessati. `models/` e i file `.pth` sono esclusi dal versionamento: dopo il clone occorre addestrare il modello o fornire checkpoint compatibili.
 
@@ -102,19 +85,15 @@ I checkpoint devono avere architettura, mapping delle attività e numero di test
 | `cli.combined_steering` | Valutazione di una griglia di combinazioni di due direzioni |
 | `cli.interpret_directions` | Analisi dei logit per una direzione heads-only e un vincolo Response |
 
-Usare `python -m cli.<modulo>`, non `python cli/<modulo>.py`. I precedenti comandi `python nome_script.py ...` diventano `python -m cli.nome_script ...`, conservando gli argomenti. Il nome `sematic_fine_tuning.py` è stato corretto in `semantic_fine_tuning.py`; notebook e job esterni devono usare i nuovi comandi.
 
-Il flusso tipico è: **preparare i dati → addestrare o caricare il modello base → adattarlo → valutare lo steering → analizzare le direzioni**. Tutti gli esempi seguenti sono comandi da eseguire con i dati e i checkpoint indicati; non presuppongono che i checkpoint siano inclusi nel repository.
 
 ## Estrazione delle process execution da OCEL
 
-`cli.extract_process_execution_OCEL` integra il flusso originariamente presente
-in `PM4Py_OCEL`: estrae una process execution per ogni oggetto `Customer Order`
+`cli.extract_process_execution_OCEL`  estrae una process execution per ogni oggetto Customer Order
 e produce il CSV utilizzato dal preprocessing Logistics. Non è un estrattore
 generico per qualsiasi OCEL: tipi di oggetto e qualificatori sono quelli del
 dataset **Container Logistics**.
 
-La dipendenza aggiuntiva è `pm4py`, importata soltanto durante l'estrazione:
 
 ```bash
 python -m pip install pm4py
@@ -206,7 +185,7 @@ Le impostazioni attuali sono definite nel codice: massimo 512 token, batch size 
 
 Nei comandi successivi passare esplicitamente `--checkpoint models/bpic2017_o/seed_42/best.pth`: il percorso di fallback di alcuni comandi è ancora `models/<dataset>_all.pth`, diverso da quello prodotto dal training corrente.
 
-## 2. Fine-tuning su tracce conformi
+## 2. Fine-tuning su tracce compliant
 
 Seleziona le tracce di training che soddisfano il vincolo, incluse quelle vacue, e ottimizza la cross-entropy sui relativi suffissi.
 
