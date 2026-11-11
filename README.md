@@ -2,7 +2,7 @@
 
 Strumenti per studiare il **task-vector steering nella predizione dei suffissi di processo**, orientando un modello verso il rispetto di vincoli dichiarativi DECLARE.
 
-Il progetto si basa su **LUPIN** di Pasquadibisceglie, Appice e Malerba. LUPIN è il modello di riferimento; questo repository raccoglie le funzionalità di adattamento ai vincoli, steering, valutazione e interpretazione delle direzioni.
+Il progetto si basa su **LUPIN** di Pasquadibisceglie et al. LUPIN è il modello di riferimento; questo repository raccoglie le funzionalità di adattamento ai vincoli, steering, valutazione e interpretazione delle direzioni.
 
 Dato un checkpoint base `θ₀` e un checkpoint adattato `θ₁`, il task vector è `τ = θ₁ − θ₀`. Lo steering costruisce `θ(α) = θ₀ + ατ`: una volta ottenuti i due checkpoint, cambiare `α` non richiede un nuovo fine-tuning.
 
@@ -21,7 +21,7 @@ Dato un checkpoint base `θ₀` e un checkpoint adattato `θ₁`, il task vector
 - [7. Interpretazione delle direzioni](#7-interpretazione-delle-direzioni)
 - [Metriche](#metriche)
 - [Estrazione dei vincoli](#estrazione-dei-vincoli)
-- [Riferimenti](#riferimenti)
+
 
 ## Preparazione dell'ambiente
 
@@ -51,7 +51,7 @@ models/                 Checkpoint locali
 outputs/                Risultati di valutazione e analisi
 ```
 
-I CSV disponibili nella copia corrente sono `event_log/bpic2017_o.csv` e `event_log/logistics.csv`.  
+I CSV disponibili nella copia corrente sono `event_log/bpic2017_o.csv` e `event_log/logistics.csv`. 
 
 Il preprocessing richiede colonne come `case`, `activity`, `timestamp` e gli attributi previsti dalla configurazione del dataset. Un nuovo CSV non è automaticamente compatibile: occorre definirne attributi e template narrativi in `utility/log_config.py`.
 
@@ -86,8 +86,8 @@ python -c 'from preprocessing.log_to_history import Log; Log("bpic2017_o", "all"
 
 ## Estrazione delle process execution da OCEL
 
-Nell'ambito del dataset logistics è necessario estrarre le process executions, in quanto il dataset di partenza è in formato OCEL
-`cli.extract_process_execution_OCEL`  estrae una process execution per ogni oggetto Customer Orde e produce il CSV utilizzato dal preprocessing Logistics. 
+Nell'ambito del dataset logistics è necessario estrarre le process executions, in quanto il dataset di partenza è in formato OCEL.
+`cli.extract_process_execution_OCEL`  estrae una process execution per ogni oggetto Customer Order e produce il CSV utilizzato dal preprocessing Logistics. 
 
 
 ```bash
@@ -105,7 +105,7 @@ python -m cli.extract_process_execution_OCEL \
 `event_log/logistics.csv` per default; `--report-dir` vale
 `outputs/extract_ocel_<nome CSV>`
 
-Nella directory `event_log` è presente una versione del dataset logistics già flattenizzata. Non è quindi necessario utilizzare il comando di estrazione delle process executions
+Nella directory `event_log` è presente una versione del dataset logistics già flattenizzata. Non è quindi necessario utilizzare il comando di estrazione delle process executions.
 
 
 ## 1. Addestramento del modello base
